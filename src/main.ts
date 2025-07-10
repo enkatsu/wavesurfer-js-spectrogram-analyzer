@@ -3,11 +3,18 @@ import WaveSurfer from 'wavesurfer.js'
 import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram.esm.js'
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
 
+const sounds = [
+  'closehat.wav',
+  'kick.wav',
+  'openhat.wav',
+  'snare.wav',
+];
+
 const ws = WaveSurfer.create({
   container: '#wavesurfer-container',
   waveColor: 'rgb(200, 0, 200)',
   progressColor: 'rgb(100, 0, 100)',
-  url: '/kick.wav',
+  url: sounds[0],
   sampleRate: 44100,
 })
 
@@ -41,12 +48,6 @@ ws.on('interaction', () => {
 }
 
 {
-  const sounds = [
-    'closehat.wav',
-    'kick.wav',
-    'openhat.wav',
-    'snare.wav',
-  ];
   const presetSoundSelect = document.querySelector('#preset-sounds') as HTMLSelectElement;
   sounds.forEach(sound => {
     const soundOption = document.createElement('option')
