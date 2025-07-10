@@ -67,7 +67,7 @@ ws.on('ready', () => {
     soundOption.value = sound
     presetSoundSelect.appendChild(soundOption)
   })
-  presetSoundSelect.onchange = (event) => {
+  presetSoundSelect.onchange = (event: Event) => {
     const target = event.target as HTMLSelectElement
     ws.load(target.value)
   }
@@ -75,39 +75,39 @@ ws.on('ready', () => {
 
 {
   const dropArea: HTMLDivElement = document.querySelector('#drop')!
-  dropArea.ondragenter = (e: DragEvent) => {
-    e.preventDefault()
-    const {target} = e
+  dropArea.ondragenter = (dragEnterEvent: DragEvent) => {
+    dragEnterEvent.preventDefault()
+    const {target} = dragEnterEvent
     if (target instanceof HTMLElement) {
       target.classList.add('over')
     }
   }
-  dropArea.ondragleave = (e) => {
-    e.preventDefault()
-    const {target} = e
+  dropArea.ondragleave = (dragleaveEvent: DragEvent) => {
+    dragleaveEvent.preventDefault()
+    const {target} = dragleaveEvent
     if (target instanceof HTMLDivElement) {
       target.classList.remove('over')
     }
   }
-  dropArea.ondragover = (e) => {
-    e.preventDefault()
+  dropArea.ondragover = (dragoverEvent: DragEvent) => {
+    dragoverEvent.preventDefault()
   }
-  dropArea.ondrop = (e) => {
-    e.preventDefault()
-    const {target} = e
+  dropArea.ondrop = (dropEvent: DragEvent) => {
+    dropEvent.preventDefault()
+    const {target} = dropEvent
     if (target instanceof HTMLDivElement) {
       target.classList.remove('over')
     }
     
     const reader = new FileReader()
-    reader.onload = (event) => {
-      ws.load(event.target?.result as string)
+    reader.onload = (loadEvent: ProgressEvent<FileReader>) => {
+      ws.load(loadEvent.target?.result as string)
     }
-    reader.readAsDataURL(e.dataTransfer?.files[0] as File)
-    dropArea.textContent = e.dataTransfer?.files[0].name as string
+    reader.readAsDataURL(dropEvent.dataTransfer?.files[0] as File)
+    dropArea.textContent = dropEvent.dataTransfer?.files[0].name as string
     ws.empty()
   }
-  document.body.ondrop = (e) => {
-    e.preventDefault()
+  document.body.ondrop = (dropEvent: DragEvent) => {
+    dropEvent.preventDefault()
   }
 }
