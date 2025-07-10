@@ -75,6 +75,25 @@ ws.on('ready', () => {
 
 {
   const dropArea: HTMLDivElement = document.querySelector('#drop')!
+  const loadFromFile = (file: File) => {
+    const reader = new FileReader()
+    reader.onload = (loadEvent: ProgressEvent<FileReader>) => {
+      ws.load(loadEvent.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+  const showOpenFileDialog = () => new Promise<FileList|null>(resolve => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'audio/*'
+    input.onchange = () => { resolve(input.files) }
+    input.click()
+  });
+  dropArea.onclick = async () => {
+    const files = await showOpenFileDialog() as FileList
+    const file = files[0]
+    loadFromFile(file)
+  }
   dropArea.ondragenter = (dragEnterEvent: DragEvent) => {
     dragEnterEvent.preventDefault()
     const {target} = dragEnterEvent
@@ -98,14 +117,9 @@ ws.on('ready', () => {
     if (target instanceof HTMLDivElement) {
       target.classList.remove('over')
     }
-    
-    const reader = new FileReader()
-    reader.onload = (loadEvent: ProgressEvent<FileReader>) => {
-      ws.load(loadEvent.target?.result as string)
-    }
-    reader.readAsDataURL(dropEvent.dataTransfer?.files[0] as File)
+    const file = dropEvent.dataTransfer?.files[0] as File
+    loadFromFile(file)
     dropArea.textContent = dropEvent.dataTransfer?.files[0].name as string
-    ws.empty()
   }
   document.body.ondrop = (dropEvent: DragEvent) => {
     dropEvent.preventDefault()
