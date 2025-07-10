@@ -25,3 +25,20 @@
 #drop.over {
   border-color: #333;
 }
+
+#now-loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  font-size: 36pt;
+}
+
+#now-loading.hidden {
+  display: none;
+}

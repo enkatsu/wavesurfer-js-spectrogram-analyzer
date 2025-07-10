@@ -36,6 +36,18 @@ ws.on('interaction', () => {
   ws.play()
 })
 
+ws.on('load', () => {
+  console.log('load');
+  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
+  nowLoading.classList.remove('hidden')
+})
+
+ws.on('ready', () => {
+  console.log('ready');
+  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
+  nowLoading.classList.add('hidden')
+})
+
 {
   const playPauseButton = document.querySelector('#play-pause') as HTMLButtonElement
   playPauseButton.onclick = () => {
