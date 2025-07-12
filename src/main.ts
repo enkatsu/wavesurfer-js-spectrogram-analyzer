@@ -1,26 +1,23 @@
-import './style.css'
-import WaveSurfer from 'wavesurfer.js'
-import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram.esm.js'
-import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
+import './style.css';
+import WaveSurfer from 'wavesurfer.js';
+import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram.esm.js';
+import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js';
 
-const sounds = [
-  'closehat.wav',
-  'kick.wav',
-  'openhat.wav',
-  'snare.wav',
-];
+const sounds = ['closehat.wav', 'kick.wav', 'openhat.wav', 'snare.wav'];
 
 const ws = WaveSurfer.create({
   container: '#wavesurfer-container',
   waveColor: 'rgb(200, 0, 200)',
   progressColor: 'rgb(100, 0, 100)',
   url: sounds[0],
-  sampleRate: 44100,
-})
-ws.registerPlugin(TimelinePlugin.create({
-  timeInterval: 0.01,
-  primaryLabelInterval: 0.1,
-}))
+  sampleRate: 44100
+});
+ws.registerPlugin(
+  TimelinePlugin.create({
+    timeInterval: 0.01,
+    primaryLabelInterval: 0.1
+  })
+);
 ws.registerPlugin(
   Spectrogram.create({
     labels: true,
@@ -30,94 +27,97 @@ ws.registerPlugin(
     frequencyMax: 8000,
     frequencyMin: 0,
     fftSamples: 1024,
-    labelsBackground: 'rgba(0, 0, 0, 0.1)',
-  }),
-)
+    labelsBackground: 'rgba(0, 0, 0, 0.1)'
+  })
+);
 
 ws.on('load', () => {
-  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
-  nowLoading.classList.remove('hidden')
-})
+  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement;
+  nowLoading.classList.remove('hidden');
+});
 
 ws.on('ready', () => {
-  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
-  nowLoading.classList.add('hidden')
-})
+  const nowLoading = document.querySelector('#now-loading') as HTMLDivElement;
+  nowLoading.classList.add('hidden');
+});
 
 {
-  const playPauseButton = document.querySelector('#play-pause') as HTMLButtonElement
+  const playPauseButton = document.querySelector('#play-pause') as HTMLButtonElement;
   playPauseButton.onclick = () => {
     if (ws.isPlaying()) {
-      ws.pause()
+      ws.pause();
     } else {
-      ws.play()
+      ws.play();
     }
-  }
+  };
 }
 
 {
   const presetSoundSelect = document.querySelector('#preset-sounds') as HTMLSelectElement;
-  sounds.forEach(sound => {
-    const soundOption = document.createElement('option')
-    soundOption.innerText = sound
-    soundOption.value = sound
-    presetSoundSelect.appendChild(soundOption)
-  })
+  sounds.forEach((sound) => {
+    const soundOption = document.createElement('option');
+    soundOption.innerText = sound;
+    soundOption.value = sound;
+    presetSoundSelect.appendChild(soundOption);
+  });
   presetSoundSelect.onchange = (event: Event) => {
-    const target = event.target as HTMLSelectElement
-    ws.load(target.value)
-  }
+    const target = event.target as HTMLSelectElement;
+    ws.load(target.value);
+  };
 }
 
 {
-  const dropArea: HTMLDivElement = document.querySelector('#drop')!
+  const dropArea: HTMLDivElement = document.querySelector('#drop')!;
   const loadFromFile = (file: File) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (loadEvent: ProgressEvent<FileReader>) => {
-      ws.load(loadEvent.target?.result as string)
-    }
-    reader.readAsDataURL(file)
-  }
-  const showOpenFileDialog = () => new Promise<FileList|null>(resolve => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'audio/*'
-    input.onchange = () => { resolve(input.files) }
-    input.click()
-  });
+      ws.load(loadEvent.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+  const showOpenFileDialog = () =>
+    new Promise<FileList | null>((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'audio/*';
+      input.onchange = () => {
+        resolve(input.files);
+      };
+      input.click();
+    });
   dropArea.onclick = async () => {
-    const files = await showOpenFileDialog() as FileList
-    const file = files[0]
-    loadFromFile(file)
-  }
+    const files = (await showOpenFileDialog()) as FileList;
+    const file = files[0];
+    loadFromFile(file);
+  };
   dropArea.ondragenter = (dragEnterEvent: DragEvent) => {
-    dragEnterEvent.preventDefault()
-    const {target} = dragEnterEvent
+    dragEnterEvent.preventDefault();
+    const { target } = dragEnterEvent;
     if (target instanceof HTMLElement) {
-      target.classList.add('over')
+      target.classList.add('over');
     }
-  }
+  };
   dropArea.ondragleave = (dragleaveEvent: DragEvent) => {
-    dragleaveEvent.preventDefault()
-    const {target} = dragleaveEvent
+    dragleaveEvent.preventDefault();
+    const { target } = dragleaveEvent;
     if (target instanceof HTMLDivElement) {
-      target.classList.remove('over')
+      target.classList.remove('over');
     }
-  }
+  };
   dropArea.ondragover = (dragoverEvent: DragEvent) => {
-    dragoverEvent.preventDefault()
-  }
+    dragoverEvent.preventDefault();
+  };
   dropArea.ondrop = (dropEvent: DragEvent) => {
-    dropEvent.preventDefault()
-    const {target} = dropEvent
+    dropEvent.preventDefault();
+    const { target } = dropEvent;
     if (target instanceof HTMLDivElement) {
-      target.classList.remove('over')
+      target.classList.remove('over');
     }
-    const file = dropEvent.dataTransfer?.files[0] as File
-    loadFromFile(file)
-    dropArea.textContent = dropEvent.dataTransfer?.files[0].name as string
-  }
+    const file = dropEvent.dataTransfer?.files[0] as File;
+    loadFromFile(file);
+    dropArea.textContent = dropEvent.dataTransfer?.files[0].name as string;
+  };
   document.body.ondrop = (dropEvent: DragEvent) => {
-    dropEvent.preventDefault()
-  }
+    dropEvent.preventDefault();
+  };
 }
