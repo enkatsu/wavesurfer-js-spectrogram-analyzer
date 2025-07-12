@@ -3,8 +3,11 @@ import WaveSurfer from 'wavesurfer.js';
 import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram.esm.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js';
 import closehat from './sounds/closehat.wav';
+import kick from './sounds/kick.wav';
+import openhat from './sounds/openhat.wav';
+import snare from './sounds/snare.wav';
 
-const sounds = [closehat, 'kick.wav', 'openhat.wav', 'snare.wav'];
+const sounds = [closehat, kick, openhat, snare];
 
 const ws = WaveSurfer.create({
   container: '#wavesurfer-container',
