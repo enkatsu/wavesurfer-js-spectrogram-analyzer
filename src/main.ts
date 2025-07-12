@@ -17,7 +17,10 @@ const ws = WaveSurfer.create({
   url: sounds[0],
   sampleRate: 44100,
 })
-
+ws.registerPlugin(TimelinePlugin.create({
+  timeInterval: 0.01,
+  primaryLabelInterval: 0.1,
+}))
 ws.registerPlugin(
   Spectrogram.create({
     labels: true,
@@ -30,20 +33,13 @@ ws.registerPlugin(
     labelsBackground: 'rgba(0, 0, 0, 0.1)',
   }),
 )
-ws.registerPlugin(TimelinePlugin.create())
-
-ws.on('interaction', () => {
-  ws.play()
-})
 
 ws.on('load', () => {
-  console.log('load');
   const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
   nowLoading.classList.remove('hidden')
 })
 
 ws.on('ready', () => {
-  console.log('ready');
   const nowLoading = document.querySelector('#now-loading') as HTMLDivElement
   nowLoading.classList.add('hidden')
 })
