@@ -10,13 +10,13 @@ const ws = WaveSurfer.create({
   waveColor: 'rgb(200, 0, 200)',
   progressColor: 'rgb(100, 0, 100)',
   url: sounds[0],
-  sampleRate: 44100
+  sampleRate: 44100,
 });
 ws.registerPlugin(
   TimelinePlugin.create({
     timeInterval: 0.01,
-    primaryLabelInterval: 0.1
-  })
+    primaryLabelInterval: 0.1,
+  }),
 );
 ws.registerPlugin(
   Spectrogram.create({
@@ -27,8 +27,8 @@ ws.registerPlugin(
     frequencyMax: 8000,
     frequencyMin: 0,
     fftSamples: 1024,
-    labelsBackground: 'rgba(0, 0, 0, 0.1)'
-  })
+    labelsBackground: 'rgba(0, 0, 0, 0.1)',
+  }),
 );
 
 ws.on('load', () => {
