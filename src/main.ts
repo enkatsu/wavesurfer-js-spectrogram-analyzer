@@ -20,12 +20,6 @@ const ws = WaveSurfer.create({
   sampleRate: 44100,
 });
 ws.registerPlugin(
-  TimelinePlugin.create({
-    timeInterval: 0.01,
-    primaryLabelInterval: 0.1,
-  }),
-);
-ws.registerPlugin(
   Spectrogram.create({
     labels: true,
     height: 200,
@@ -37,15 +31,46 @@ ws.registerPlugin(
     labelsBackground: 'rgba(0, 0, 0, 0.1)',
   }),
 );
+let timeline: TimelinePlugin|null = null;
 
 ws.on('load', () => {
   const nowLoading = document.querySelector('#now-loading') as HTMLDivElement;
   nowLoading.classList.remove('hidden');
 });
 
-ws.on('ready', () => {
+ws.on('ready', (soundTime: number) => {
   const nowLoading = document.querySelector('#now-loading') as HTMLDivElement;
   nowLoading.classList.add('hidden');
+
+  if (timeline) {
+    timeline.destroy();
+  }
+  if (soundTime < 1.0) {
+    timeline = TimelinePlugin.create({
+      timeInterval: 0.01,
+      primaryLabelInterval: 0.1,
+      insertPosition: 'afterend',
+    });
+  } else {
+    timeline = TimelinePlugin.create({
+      timeInterval: 0.1,
+      primaryLabelInterval: 1.0,
+      insertPosition: 'afterend',
+    });
+  }
+  ws.registerPlugin(timeline);
+  // function getDigitExponent(num: number): number {
+  //   if (num === 0) return 0;
+  //   if (num < -1) return 0;
+  //   const log10 = Math.log10(num);
+  //   return Math.floor(log10) + 1;
+  // }
+  // const digitExponent = getDigitExponent(soundTime);
+  // timeline = TimelinePlugin.create({
+  //   timeInterval: digitExponent * 0.1,
+  //   primaryLabelInterval: digitExponent,
+  //   insertPosition: 'afterend',
+  // });
 });
 
 {
