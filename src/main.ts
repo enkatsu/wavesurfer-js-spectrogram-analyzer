@@ -7,13 +7,16 @@ import kick from './sounds/kick.wav';
 import openhat from './sounds/openhat.wav';
 import snare from './sounds/snare.wav';
 
-const sounds = [closehat, kick, openhat, snare];
+const sounds = {
+  closehat, kick, openhat, snare
+};
+type PresetSound = keyof typeof sounds;
 
 const ws = WaveSurfer.create({
   container: '#wavesurfer-container',
   waveColor: 'rgb(200, 0, 200)',
   progressColor: 'rgb(100, 0, 100)',
-  url: sounds[0],
+  url: sounds.closehat,
   sampleRate: 44100,
 });
 ws.registerPlugin(
@@ -58,10 +61,10 @@ ws.on('ready', () => {
 
 {
   const presetSoundSelect = document.querySelector('#preset-sounds') as HTMLSelectElement;
-  sounds.forEach((sound) => {
+  (Object.keys(sounds) as PresetSound[]).forEach((sound) => {
     const soundOption = document.createElement('option');
     soundOption.innerText = sound;
-    soundOption.value = sound;
+    soundOption.value = sounds[sound];
     presetSoundSelect.appendChild(soundOption);
   });
   presetSoundSelect.onchange = (event: Event) => {
